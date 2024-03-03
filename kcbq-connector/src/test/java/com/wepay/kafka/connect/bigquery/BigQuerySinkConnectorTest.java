@@ -62,14 +62,14 @@ public class BigQuerySinkConnectorTest {
 
   @Test
   public void testTaskClass() {
-    assertEquals(BigQuerySinkTask.class, new BigQuerySinkConnector().taskClass());
+    assertEquals(BigQuerySinkTask.class, new BigQuerySinkConnectorX().taskClass());
   }
 
   @Test
   public void testTaskConfigs() {
     Map<String, String> properties = propertiesFactory.getProperties();
 
-    BigQuerySinkConnector testConnector = new BigQuerySinkConnector();
+    BigQuerySinkConnectorX testConnector = new BigQuerySinkConnectorX();
 
     testConnector.start(properties);
 
@@ -104,18 +104,18 @@ public class BigQuerySinkConnectorTest {
 
   @Test
   public void testConfig() {
-    assertNotNull(new BigQuerySinkConnector().config());
+    assertNotNull(new BigQuerySinkConnectorX().config());
   }
 
   @Test
   public void testVersion() {
-    assertNotNull(new BigQuerySinkConnector().version());
+    assertNotNull(new BigQuerySinkConnectorX().version());
   }
 
   // Doesn't do anything at the moment, but having this here will encourage tests to be written if
   // the stop() method ever does anything significant
   @Test
   public void testStop() {
-    new BigQuerySinkConnector().stop();
+    new BigQuerySinkConnectorX().stop();
   }
 }

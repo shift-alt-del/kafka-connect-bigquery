@@ -537,7 +537,8 @@ public class BigQuerySinkTask extends SinkTask {
           uuid,
           Instant.now().toEpochMilli()
       );
-      mergeBatches = new MergeBatches(intermediateTableSuffix);
+      String intermediateDataset = config.getString(BigQuerySinkConfig.INTERMEDIATE_DATASET_CONFIG);
+      mergeBatches = new MergeBatches(intermediateTableSuffix, intermediateDataset);
     }
 
     cache = getCache();

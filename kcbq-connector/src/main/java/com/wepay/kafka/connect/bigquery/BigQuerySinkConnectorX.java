@@ -39,12 +39,12 @@ import java.util.Map;
  * A {@link SinkConnector} used to delegate BigQuery data writes to
  * {@link org.apache.kafka.connect.sink.SinkTask SinkTasks}.
  */
-public class BigQuerySinkConnector extends SinkConnector {
+public class BigQuerySinkConnectorX extends SinkConnector {
 
   private BigQuerySinkConfig config;
   private Map<String, String> configProperties;
 
-  private static final Logger logger = LoggerFactory.getLogger(BigQuerySinkConnector.class);
+  private static final Logger logger = LoggerFactory.getLogger(BigQuerySinkConnectorX.class);
 
   @Override
   public ConfigDef config() {

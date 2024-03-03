@@ -85,7 +85,7 @@ public class MergeQueriesTest {
   }
 
   private void initialiseMergeBatches() {
-    mergeBatches = new MergeBatches("_tmp_6_uuid_epoch");
+    mergeBatches = new MergeBatches("_tmp_6_uuid_epoch", DESTINATION_TABLE.getDataset());
     mergeBatches.intermediateTableFor(DESTINATION_TABLE);
   }
 

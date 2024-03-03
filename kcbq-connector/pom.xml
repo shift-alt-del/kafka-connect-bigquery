@@ -29,7 +29,7 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>kcbq-connector</artifactId>
+    <artifactId>kcbq-connector-forked</artifactId>
     <name>kafka-connect-bigquery</name>
 
     <properties>

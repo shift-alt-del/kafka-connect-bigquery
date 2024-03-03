@@ -21,6 +21,7 @@ package com.wepay.kafka.connect.bigquery.config;
 
 import com.google.cloud.bigquery.Schema;
 import com.google.cloud.bigquery.TimePartitioning;
+import com.wepay.kafka.connect.bigquery.BigQuerySinkConnectorX;
 import com.wepay.kafka.connect.bigquery.GcpClientBuilder;
 import com.wepay.kafka.connect.bigquery.api.SchemaRetriever;
 import com.wepay.kafka.connect.bigquery.convert.BigQueryRecordConverter;
@@ -28,7 +29,6 @@ import com.wepay.kafka.connect.bigquery.convert.BigQuerySchemaConverter;
 import com.wepay.kafka.connect.bigquery.convert.RecordConverter;
 import com.wepay.kafka.connect.bigquery.convert.SchemaConverter;
 import com.wepay.kafka.connect.bigquery.retrieve.IdentitySchemaRetriever;
-import com.wepay.kafka.connect.bigquery.utils.FieldNameSanitizer;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.Config;
 import org.apache.kafka.common.config.ConfigDef;
@@ -339,6 +339,14 @@ public class BigQuerySinkConfig extends AbstractConfig {
       + "single destination table, but their names will always start with the name of the " 
       + "destination table, followed by this suffix, and possibly followed by an additional " 
       + "suffix.";
+
+  public static final String INTERMEDIATE_DATASET_CONFIG =                    "intermediateDataset";
+  private static final ConfigDef.Type INTERMEDIATE_DATASET_TYPE =             ConfigDef.Type.STRING;
+  public static final String INTERMEDIATE_DATASET_DEFAULT =                   null;
+  private static final ConfigDef.Validator INTERMEDIATE_DATASET_VALIDATOR = new ConfigDef.NonEmptyString();
+  private static final ConfigDef.Importance INTERMEDIATE_DATASET_IMPORTANCE = ConfigDef.Importance.LOW;
+  private static final String INTERMEDIATE_DATASET_DOC =
+        "The dataset in which intermediate tables will be generated to. If not set, it uses the destination dataset.";
 
   public static final String MERGE_INTERVAL_MS_CONFIG =                    "mergeIntervalMs";
   public static final String MERGE_RECORDS_THRESHOLD_CONFIG =                    "mergeRecordsThreshold";
@@ -724,6 +732,13 @@ public class BigQuerySinkConfig extends AbstractConfig {
             INTERMEDIATE_TABLE_SUFFIX_IMPORTANCE,
             INTERMEDIATE_TABLE_SUFFIX_DOC
         ).define(
+            INTERMEDIATE_DATASET_CONFIG,
+            INTERMEDIATE_DATASET_TYPE,
+            INTERMEDIATE_DATASET_DEFAULT,
+            INTERMEDIATE_DATASET_VALIDATOR,
+            INTERMEDIATE_DATASET_IMPORTANCE,
+            INTERMEDIATE_DATASET_DOC
+        ).define(
             MERGE_INTERVAL_MS_CONFIG,
             MERGE_INTERVAL_MS_TYPE,
             MERGE_INTERVAL_MS_DEFAULT,
@@ -871,7 +886,7 @@ public class BigQuerySinkConfig extends AbstractConfig {
   }
 
   /**
-   * Used in conjunction with {@link com.wepay.kafka.connect.bigquery.BigQuerySinkConnector#validate(Map)} to perform
+   * Used in conjunction with {@link BigQuerySinkConnectorX#validate(Map)} to perform
    * preflight configuration checks. Simple validations that only require a single property value at a time (such as
    * ensuring that boolean properties only contain true/false values, or that values for required properties are
    * provided) are handled automatically by the {@link #getConfig() ConfigDef} for this class and optionally-defined

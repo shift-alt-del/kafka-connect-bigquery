@@ -53,6 +53,7 @@ public class MergeBatches {
   private static long streamingBufferAvailabilityWaitMs = STREAMING_BUFFER_AVAILABILITY_WAIT_MS;
 
   private final String intermediateTableSuffix;
+  private final String intermediateDataset;
   private final BiMap<TableId, TableId> intermediateToDestinationTables;
   private final ConcurrentMap<TableId, AtomicInteger> batchNumbers;
   private final ConcurrentMap<TableId, ConcurrentMap<Integer, Batch>> batches;
@@ -68,8 +69,9 @@ public class MergeBatches {
     streamingBufferAvailabilityWaitMs = STREAMING_BUFFER_AVAILABILITY_WAIT_MS;
   }
 
-  public MergeBatches(String intermediateTableSuffix) {
+  public MergeBatches(String intermediateTableSuffix, String intermediateDataset) {
     this.intermediateTableSuffix = intermediateTableSuffix;
+    this.intermediateDataset = intermediateDataset;
 
     this.intermediateToDestinationTables = Maps.synchronizedBiMap(HashBiMap.create());
     this.batchNumbers = new ConcurrentHashMap<>();
@@ -120,10 +122,19 @@ public class MergeBatches {
     String tableName = FieldNameSanitizer.sanitizeName(
         destinationTable.getTable() + intermediateTableSuffix
     );
-    TableId result = TableId.of(
-        destinationTable.getDataset(),
-        tableName
-    );
+
+    TableId result = null;
+    if (intermediateDataset == null) {
+      result = TableId.of(
+              destinationTable.getDataset(),
+              tableName
+      );
+    }else{
+      result = TableId.of(
+              intermediateDataset,
+              tableName
+      );
+    }
 
     batchNumbers.put(result, new AtomicInteger());
     batches.put(result, new ConcurrentHashMap<>());
