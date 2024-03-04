@@ -119,8 +119,10 @@ public class MergeBatches {
   }
 
   private TableId newIntermediateTable(TableId destinationTable) {
+    // The intermediate table name is the destination dataset name, followed by "_T_",
+    // followed by the destination table name, followed by the intermediate table suffix
     String tableName = FieldNameSanitizer.sanitizeName(
-        destinationTable.getTable() + intermediateTableSuffix
+        destinationTable.getDataset() + "_T_" + destinationTable.getTable() + intermediateTableSuffix
     );
 
     TableId result = null;
@@ -214,7 +216,7 @@ public class MergeBatches {
     }
     return currentBatch == null || currentBatch.total.get() == 0L;
   }
-  
+
   /**
    * Increment the batch number for the given table, and return the old batch number.
    * @param intermediateTable the table whose batch number should be incremented

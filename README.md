@@ -15,6 +15,7 @@ The connector writes intermediate tables to the same dataset of destination data
 ## Package the connector
 
 ```bash
+sh deploy.sh
 ```
 
 ## History

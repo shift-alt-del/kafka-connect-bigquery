@@ -2,6 +2,8 @@ PACKAGE_ROOT="packages/wepay-kafka-connect-bigquery-x"
 PACKAGE_LIB_PATH="$PACKAGE_ROOT/lib"
 PACKAGE_DOC_PATH="$PACKAGE_ROOT/doc"
 
+rm -rf $PACKAGE_ROOT
+
 # build the package
 mvn clean package -DskipTests
 
